@@ -1,4 +1,4 @@
-- name: MariaDB
+- name: debdb
   cpus: 1
   memory: 1024
   #ip: 10.0.19.156
@@ -9,4 +9,17 @@
   bridge: Intel(R) Ethernet Connection (2) I219-LM
   gui: False
   pasta: geral 
-  script: scripts/mariadb.sh
+  script: scripts/mariadb.sh  
+
+- name: aldb
+  cpus: 1
+  memory: 1024
+  ip: 10.0.19.160
+  tipo: dhcp
+  box: almalinux/9
+  script: ""
+  network: public_network
+  bridge: Intel(R) Ethernet Connection (2) I219-LM
+  gui: False
+  pasta: geral 
+  script: scripts/aldb.sh
