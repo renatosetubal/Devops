@@ -1,24 +1,22 @@
 require 'yaml'
 secmachines = YAML.load_file("machines.yaml")
 
-
 Vagrant.configure("2") do |config|
-    secmachines.each do |maq|    
-        config.vm.define maq["name"] do |server|    
-            server.vm.hostname = maq["name"]
-            server.vm.box = maq["box"]
-            server.vm.box_check_update = false
-            server.vm.network maq["network"], bridge: maq["bridge"], type: maq['tipo'] 
-           
-            config.vm.provider "virtualbox" do |vb| #Configuração da máquina virtual que será criada
-                vb.customize ["modifyvm", :id, "--groups", "/LAB01"]
-                vb.name = maq['name']
-                vb.cpus = maq['cpus']
-                vb.memory = maq['memory']
-                vb.gui = maq['gui']
-            end
-            config.vm.synced_folder "geral", "/vagrant", disabled: false 
-            server.vm.provision "shell", path: maq["script"]
-        end    
+  secmachines.each do |machines|
+    config.vm.define machines["name"] do |server|
+      server.vm.hostname = machines["name"]
+      server.vm.box = machines["box"]
+      server.vm.box_check_update = false
+      server.vm.network machines["network"], bridge: machines["bridge"], type: machines['tipo']
+      server.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--groups", "/MariaDb"]
+        vb.memory = machines["memory"]
+        vb.cpus = machines["cpus"]
+        vb.name = machines["name"]
+        vb.gui = machines['gui']
+      end
+      server.vm.provision "shell", path: machines["script"]
+      config.vm.synced_folder "geral", "/vagrant", disabled: false 
     end
+  end
 end
