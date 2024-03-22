@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+HOSTNAME="DebianX12"
+DISC01 = "disks/"+HOSTNAME+"_sdb.vdi"
 Vagrant.configure("2") do |config|
     # #Nome da Imagem que será baixada
     #config.vm.box = "debian/bookworm64"
@@ -11,19 +13,15 @@ Vagrant.configure("2") do |config|
    
     config.vm.provider "virtualbox" do |vb| #Configuração da máquina virtual que será criada
      
-       nomeMaquina="debianhd"
-       sdb = "disks/debianhdsdb.vdi"
-
-       if File.exist?(sdb)
-        #  vb.customize ['createhd', '--filename', sdb, '--size', 10 * 1024]
-          vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb]
+      if File.exist?(DISC01)
+          vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', DISC01]
       else
-        vb.customize ['createhd', '--filename', sdb, '--size', 10 * 1024]
-        vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb] 
+        vb.customize ['createhd', '--filename', DISC01, '--size', 10 * 1024]
+        vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', DISC01] 
       end
      
        
-       vb.name = nomeMaquina #Definindo o nome da Máquina
+       vb.name = HOSTNAME #Definindo o nome da Máquina
        vb.cpus = 1 
        vb.gui = false 
        vb.memory = "1024" 
